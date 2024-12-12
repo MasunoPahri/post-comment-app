@@ -28,6 +28,7 @@ export const login = async (req: Request, res: Response): Promise<any> => {
         });
     }
 
+    // Generate token for signed user
     const token = jwt.sign(
         {id : user.id},
         process.env.JWT_SECRET as string,
