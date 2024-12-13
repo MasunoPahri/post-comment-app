@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { PrismaClient } from "@prisma/client";
 import jwt from "jsonwebtoken";
+import bcrypt from "bcryptjs";
 
 const prisma = new PrismaClient();
 
@@ -25,8 +26,9 @@ export const register = async (req: Request, res: Response): Promise<any> => {
     }
 
     // Create User
+    const decrptPwd  = await bcrypt.hash(password, 10);
     const createUser = await prisma.user.create({
-        data: {username, email, password}
+        data: {username, email, password: decrptPwd}
     });
 
     // Generate token for registered user
@@ -37,6 +39,7 @@ export const register = async (req: Request, res: Response): Promise<any> => {
     );
 
     return res.status(201).json({
+        token: token,
         message: "You're registered successfully"
     });
 }
