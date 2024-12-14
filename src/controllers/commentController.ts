@@ -24,10 +24,23 @@ export const getAllComments = async (req: Request, res: Response): Promise<any> 
         }
 
         // Fetch All Comments
-        const allComments = await prisma.comment.findMany();
+        const itemPerPage = 25;
+        const dataSkip    = cursor ? 1 : 0;
+        const dataCursor  = cursor ? { id: parseInt(cursor as string, 10) } : undefined;
+        const allComments = await prisma.comment.findMany({
+            take: itemPerPage,
+            skip: dataSkip,
+            cursor: dataCursor,
+            orderBy: {
+                id: "asc"
+            }
+        });
+
+        const nextCursor = allComments.length > 0 ? allComments[allComments.length - 1].id : null;
 
         return res.status(200).json({
-            results: allComments
+            results: allComments,
+            nextCursor
         });
 
 
