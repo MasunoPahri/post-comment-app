@@ -11,8 +11,8 @@ const app: Application = express();
 
 app.use(express.json());
 
+app.use('/api', appRoute);
 app.use('/api/auth', authRoute);
-app.use('/api/get-post', appRoute);
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);

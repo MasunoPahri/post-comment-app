@@ -8,11 +8,6 @@ interface PostBody {
     content: string;
 }
 
-interface CommentBody {
-    postId: number;
-    content: string;
-}
-
 export const getAllPost = async (req: Request, res: Response): Promise<any> => {
     try {
 
