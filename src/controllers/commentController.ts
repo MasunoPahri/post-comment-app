@@ -36,6 +36,7 @@ export const getAllComments = async (req: Request, res: Response): Promise<any> 
             }
         });
 
+        // find for the next cursor
         const nextCursor = allComments.length > 0 ? allComments[allComments.length - 1].id : null;
 
         return res.status(200).json({
@@ -47,4 +48,30 @@ export const getAllComments = async (req: Request, res: Response): Promise<any> 
     } catch (error) {
         return res.status(500).json({error})
     }
+}
+
+export const createComment = async (req: Request, res: Response): Promise<any> => {
+    const userId = (req as any).userId; 
+
+    const { content, postId }: CommentBody = req.body;
+
+    // Check related post
+    const postEntity = await prisma.post.findUnique({
+        where: {id: postId}
+    });
+    if (!postEntity) {
+        return res.status(404).json({
+            message: "Post does not exist"
+        });
+    }
+
+    const saveComments = await prisma.comment.create({
+        data: { content, postId, userId }
+    });
+
+    return res.status(201).json({
+        message: "Success",
+        userId,
+        content
+    });
 }
