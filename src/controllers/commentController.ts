@@ -27,9 +27,11 @@ export const getAllComments = async (req: Request, res: Response): Promise<any> 
         const itemPerPage = 25;
         const dataSkip    = cursor ? 1 : 0;
         const dataCursor  = cursor ? { id: parseInt(cursor as string, 10) } : undefined;
+
         const allComments = await prisma.comment.findMany({
+            where: { postId: parseInt(postId as string, 10) },
             take: itemPerPage,
-            skip: dataSkip,
+            // skip: dataSkip,
             cursor: dataCursor,
             orderBy: {
                 id: "asc"
