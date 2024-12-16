@@ -24,6 +24,7 @@ model Post {
   content     String
   mediaUrl    String
   mediaType   String
+  extension   String
   isPrivate   Boolean
   mediaWidth  Int
   mediaHeight Int
